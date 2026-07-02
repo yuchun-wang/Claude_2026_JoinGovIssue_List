@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公共政策網路參與平台女性權益相關議題整理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+  :root {
+    --bg: #fdf6f2;
+    --card-bg: #ffffff;
+    --ink: #2b2230;
+    --ink-soft: #6b5f6b;
+    --accent: #b3395f;
+    --accent-dark: #8a2a49;
+    --accent-soft: #f6dfe6;
+    --pro: #2e7d5b;
+    --pro-bg: #e6f4ee;
+    --con: #a84c2b;
+    --con-bg: #fbeae2;
+    --border: #ece0e2;
+    --active-badge: #2e7d5b;
+    --completed-badge: #7a7086;
+    --shadow: 0 2px 10px rgba(60, 30, 45, 0.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  header {
+    padding: 48px 20px 32px;
+    text-align: center;
+    background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    margin: 0 0 10px;
+    font-size: 1.9rem;
+    color: var(--accent-dark);
+  }
+  header p {
+    max-width: 680px;
+    margin: 0 auto;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .disclaimer {
+    max-width: 680px;
+    margin: 16px auto 0;
+    padding: 12px 16px;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    font-size: 0.82rem;
+    color: var(--accent-dark);
+    text-align: left;
+  }
+  nav.category-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(253, 246, 242, 0.95);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  nav.category-nav a {
+    text-decoration: none;
+    color: var(--accent-dark);
+    background: #fff;
+    border: 1px solid var(--accent-soft);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+  nav.category-nav a:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 11;
+    background: rgba(253, 246, 242, 0.97);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+  .search-row {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 14px 20px 4px;
+  }
+  .search-row input {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 11px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--ink);
+    outline: none;
+    font-family: inherit;
+  }
+  .search-row input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(179, 57, 95, 0.12);
+  }
+  .controls-row {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 10px 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+  }
+  .control-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+  .control-field select {
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--ink);
+    outline: none;
+  }
+  .control-field select:focus {
+    border-color: var(--accent);
+  }
+  .sync-status {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 6px 20px 12px;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  .sync-status.ok { color: #2e7d5b; }
+  .sync-status.warn { color: #a84c2b; }
+  .sync-status code {
+    background: var(--accent-soft);
+    padding: 1px 6px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+  }
+  .link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--accent-dark);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: inherit;
+  }
+  .count-pill {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 0.72rem;
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    padding: 1px 9px;
+    border-radius: 999px;
+    vertical-align: middle;
+  }
+  .live-tag {
+    display: inline-block;
+    margin-left: 8px;
+    color: #2e7d5b;
+    font-size: 0.75rem;
+  }
+  .new-card { border-color: var(--accent); border-width: 1.5px; }
+  .empty-state {
+    text-align: center;
+    color: var(--ink-soft);
+    padding: 60px 20px;
+    font-size: 0.95rem;
+  }
+  main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+  section.category {
+    margin-bottom: 44px;
+  }
+  section.category h2 {
+    font-size: 1.3rem;
+    color: var(--accent-dark);
+    border-left: 5px solid var(--accent);
+    padding-left: 12px;
+    margin-bottom: 18px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: 1.08rem;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    color: #fff;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge.active { background: var(--active-badge); }
+  .badge.completed { background: var(--completed-badge); }
+  .endorse-count {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+  .desc {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    margin: 10px 0 14px;
+  }
+  .stance-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 560px) {
+    .stance-grid { grid-template-columns: 1fr; }
+  }
+  .stance {
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.85rem;
+  }
+  .stance.pro { background: var(--pro-bg); }
+  .stance.con { background: var(--con-bg); }
+  .stance-label {
+    font-weight: 700;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stance.pro .stance-label { color: var(--pro); }
+  .stance.con .stance-label { color: var(--con); }
+  .stance ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .stance li { margin-bottom: 4px; }
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 999px;
+    transition: transform 0.1s, box-shadow 0.15s;
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn.primary:hover {
+    background: var(--accent-dark);
+    box-shadow: 0 4px 12px rgba(179, 57, 95, 0.35);
+  }
+  .btn.secondary {
+    background: #fff;
+    color: var(--ink-soft);
+    border: 1px solid var(--border);
+  }
+  .btn.secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent-dark);
+  }
+  footer {
+    text-align: center;
+    padding: 30px 20px 50px;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+  footer a { color: var(--accent-dark); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>公共政策網路參與平台女性權益相關議題整理</h1>
+  <p>整理自「公共政策網路參與平臺・提點子」中與女性權益、性別平等相關的提案<br>依主題分類並附上簡短說明與正反方意見，方便快速了解議題全貌<br>點擊「前往連署」可直接回到原始提案頁面參與附議</p>
+  <div class="disclaimer">
+    ⚠️ 說明：正／反方意見為簡化摘要，用意是幫助讀者快速掌握議題的常見討論角度，<strong>並非官方立場，也不代表本站對議題的評價</strong>，實際內容與附議狀態請以 join.gov.tw 原頁面為準。<br><br>標示 🆕 的卡片是進站時即時檢查到、系統依關鍵字自動歸類的新議題，尚未經人工整理摘要與正反方意見。
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="search-row">
+    <input type="text" id="searchInput" placeholder="🔍 輸入關鍵字篩選議題（例如：生理假、托育、性騷擾…）">
+  </div>
+  <div class="controls-row">
+    <label class="control-field">
+      排序
+      <select id="sortSelect">
+        <option value="endorse">關注人數（高到低）</option>
+        <option value="time">發布時間（新到舊）</option>
+        <option value="status">連署狀態</option>
+      </select>
+    </label>
+    <label class="control-field">
+      狀態篩選
+      <select id="statusFilterSelect">
+        <option value="all">全部狀態</option>
+        <option value="active">連署中</option>
+        <option value="responded">已成案・政府已回應</option>
+        <option value="closed">已結束（未成案／撤回）</option>
+      </select>
+    </label>
+  </div>
+  <div class="sync-status" id="syncStatus">⏳ 準備核對來源網站最新資料…</div>
+  <nav class="category-nav" id="categoryNav"></nav>
+</div>
+
+<main id="main"></main>
+
+<footer>
+  資料來源：<a href="https://join.gov.tw/idea/index" target="_blank" rel="noopener">join.gov.tw 公共政策網路參與平臺</a>　|　本頁面為民間整理，非官方網站
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
