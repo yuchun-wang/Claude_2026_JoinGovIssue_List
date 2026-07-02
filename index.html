@@ -59,12 +59,6 @@
     text-align: left;
   }
   nav.category-nav {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: rgba(253, 246, 242, 0.95);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--border);
     padding: 10px 16px;
     display: flex;
     flex-wrap: wrap;
@@ -190,6 +184,41 @@
     color: var(--ink-soft);
     padding: 60px 20px;
     font-size: 0.95rem;
+  }
+  /* 手機版：壓縮頂部固定工具列的高度，避免佔掉太多螢幕空間 */
+  @media (max-width: 640px) {
+    header { padding: 24px 16px 20px; }
+    header h1 { font-size: 1.35rem; }
+    header p { font-size: 0.85rem; }
+    .disclaimer { margin-top: 12px; padding: 10px 12px; font-size: 0.76rem; }
+    .search-row { padding: 8px 12px 4px; }
+    .search-row input { padding: 8px 14px; font-size: 0.9rem; }
+    .controls-row {
+      padding: 6px 12px 0;
+      gap: 10px;
+      justify-content: flex-start;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .control-field { flex-shrink: 0; font-size: 0.76rem; }
+    .control-field select { font-size: 0.78rem; padding: 4px 8px; }
+    .sync-status {
+      padding: 4px 12px 6px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    nav.category-nav {
+      padding: 6px 12px;
+      gap: 6px;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    nav.category-nav a { padding: 5px 12px; font-size: 0.78rem; }
   }
   main {
     max-width: 880px;
