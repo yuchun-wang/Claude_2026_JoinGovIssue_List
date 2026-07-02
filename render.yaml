@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: claude-2026-joingovissue-list
+    runtime: python
+    plan: free
+    buildCommand: echo "no dependencies to install"
+    startCommand: python3 server.py
+    autoDeploy: true

@@ -7,17 +7,22 @@
 
 用法： python3 server.py [port]
 啟動後開啟 http://localhost:8787
+
+部署到 Render 等平台時，會改用平台注入的 PORT 環境變數，並監聽 0.0.0.0。
 """
 
 import json
+import os
 import sys
 import time
 import threading
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8787
+PORT = int(os.environ.get("PORT") or (sys.argv[1] if len(sys.argv) > 1 else 8787))
+HOST = "0.0.0.0"
 
 # 與整理 data.js 時使用的關鍵字一致，用來向 join.gov.tw 撈取最新狀態
 KEYWORDS = [
@@ -36,27 +41,35 @@ _cache = {"data": None, "fetchedAt": 0}
 _last_force_at = 0
 
 
+def _fetch_keyword(kw):
+    url = SEARCH_URL + urllib.parse.quote(kw)
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        payload = json.load(resp)
+    return payload.get("result", [])
+
+
 def fetch_live_data():
-    """向 join.gov.tw 依關鍵字查詢，合併成 {id: {title, status, endorseCount, attentionCount}}"""
+    """向 join.gov.tw 依關鍵字平行查詢，合併成 {id: {title, status, endorseCount, attentionCount}}
+    平行處理是為了把原本依序查詢約 20 秒的耗時壓到幾秒內，避免部署平台的請求逾時限制。"""
     items = {}
     errors = []
-    for kw in KEYWORDS:
-        url = SEARCH_URL + urllib.parse.quote(kw)
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                payload = json.load(resp)
-            for it in payload.get("result", []):
-                items[it["id"]] = {
-                    "id": it["id"],
-                    "title": it.get("title", ""),
-                    "status": it.get("status", ""),
-                    "endorseCount": it.get("endorseCount", 0),
-                    "attentionCount": it.get("attentionCount", 0),
-                    "publishDate": it.get("publishDate"),
-                }
-        except Exception as e:
-            errors.append(f"{kw}: {e}")
+    with ThreadPoolExecutor(max_workers=10) as pool:
+        future_to_kw = {pool.submit(_fetch_keyword, kw): kw for kw in KEYWORDS}
+        for future in as_completed(future_to_kw):
+            kw = future_to_kw[future]
+            try:
+                for it in future.result():
+                    items[it["id"]] = {
+                        "id": it["id"],
+                        "title": it.get("title", ""),
+                        "status": it.get("status", ""),
+                        "endorseCount": it.get("endorseCount", 0),
+                        "attentionCount": it.get("attentionCount", 0),
+                        "publishDate": it.get("publishDate"),
+                    }
+            except Exception as e:
+                errors.append(f"{kw}: {e}")
     return items, errors
 
 
@@ -151,4 +164,4 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     print(f"伺服器啟動：http://localhost:{PORT}  (Ctrl+C 結束)")
-    ThreadingHTTPServer(("localhost", PORT), Handler).serve_forever()
+    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
